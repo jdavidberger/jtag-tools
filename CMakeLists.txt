@@ -10,7 +10,7 @@ add_library(jtag jtag_tap.c)
 target_include_directories(jtag PUBLIC .)
 target_link_libraries(jtag mpsse)
 
-if(EXISTS GlobalLogger_sqlite.c)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/GlobalLogger_sqlite.c)
   add_library(GlobalLogger_sqlite SHARED GlobalLogger_sqlite.c )
 else()
   message(FATAL_ERROR "You must copy the generated files GlobalLogger.h and GlobalLogger_sqlite.c to this directory to build this tool.")
