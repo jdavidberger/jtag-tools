@@ -82,9 +82,6 @@ int main(int argc, char **argv)
   
   uint32_t ir_lengths[8] = {};
   int loggerIdx = -1;
-  
-  jtag_go_to_state(STATE_SHIFT_DR);
-  jtag_tap_shift((uint8_t*)id, (uint8_t*)id, 32 * numDev, true);
 
   for(int i = 0;i < numDev;i++) {
     fprintf(stderr, "Found devices %02x\r\n", id[i]);
