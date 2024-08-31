@@ -16,5 +16,17 @@ else()
   message(FATAL_ERROR "You must copy the generated files GlobalLogger.h and GlobalLogger_sqlite.c to this directory to build this tool.")
 endif()
 
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/GlobalLogger_printer.c)
+  add_library(GlobalLogger_printer SHARED GlobalLogger_printer.c )
+else()
+  message(FATAL_ERROR "You must copy the generated files GlobalLogger.h and GlobalLogger_sqlite.c to this directory to build this tool.")
+endif()
+
+add_executable(jtag_log_capture jtag_log_capture.c)
+target_link_libraries(jtag_log_capture mpsse jtag)
+
 add_executable(sqlite_logger sqlite_logger.c)
-target_link_libraries(sqlite_logger mpsse jtag sqlite3 GlobalLogger_sqlite)
+target_link_libraries(sqlite_logger sqlite3 GlobalLogger_sqlite)
+
+add_executable(print_logger print_logger.c)
+target_link_libraries(print_logger GlobalLogger_printer)

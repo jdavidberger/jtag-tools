@@ -17,7 +17,6 @@
 #include <fcntl.h> /* _O_BINARY */
 #endif
 
-#include "lattice_cmds.h"
 #include "stdbool.h"
 
 #include "GlobalLogger.h"
@@ -31,37 +30,21 @@ uint8_t counter = 0;
 bool capturing = false;
 FILE* file = 0;
 
-void GlobalLogger_init_sql(GlobalLogger_ctx* ctx, sqlite3* db); 
-
-static double get_time() {
-      struct timeval tv = {0 };
-      gettimeofday( &tv, NULL );
-      return tv.tv_sec + (0.000001 * tv.tv_usec);
-}
-
 int main(int argc, char **argv)
 {
-  const char* sql_fn = argc > 1 ? argv[1] : "event_log.sqlite";
-  const char* raw_fn = argc > 2 ? argv[2] : 0;
+  const char* raw_fn = argc > 1 ? argv[1] : "event_log.raw";
 
-  sqlite3* db = 0;
-  sqlite3_open(sql_fn, &db);
-  
   GlobalLogger_ctx ctx = {};
-  GlobalLogger_init_sql(&ctx, db);
-  FILE* raw_file = raw_fn ? fopen(raw_fn, "rb") : stdin;
 
+  FILE* raw_file = fopen(raw_fn, "rb");
   struct GlobalLogger_transaction tx = { 0 };
 
-  double startTime = get_time();
   int txs = 0;
 
   while(fread(tx.l, sizeof(tx.l), 1, raw_file)) {
      txs++;
      GlobalLogger_handle(&ctx, &tx, 0);
   }
-
-  fprintf(stderr, "%d %f\r\n", txs, txs / (get_time() - startTime));
 
   return 0;
 }
