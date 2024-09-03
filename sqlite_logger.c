@@ -39,8 +39,12 @@ static double get_time() {
       return tv.tv_sec + (0.000001 * tv.tv_usec);
 }
 
+static volatile int keepRunning = 1;
+
 int main(int argc, char **argv)
 {
+
+
   const char* sql_fn = argc > 1 ? argv[1] : "event_log.sqlite";
   const char* raw_fn = argc > 2 ? argv[2] : 0;
 
@@ -62,6 +66,8 @@ int main(int argc, char **argv)
   }
 
   fprintf(stderr, "%d %f\r\n", txs, txs / (get_time() - startTime));
+  sqlite3_close(db);
+  fprintf(stderr, "Exiting SQLite ...\n");
 
   return 0;
 }

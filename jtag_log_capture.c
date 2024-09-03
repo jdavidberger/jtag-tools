@@ -8,6 +8,8 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <signal.h>
+
 
 #include <sys/time.h>
 #include <time.h>
@@ -55,8 +57,16 @@ void shift_bit(FILE* event_file, bool b) {
   }
 }
 
+static volatile int keepRunning = 1;
+void intHandler(int dummy) {
+    if(keepRunning == 0) exit(-1);
+
+    keepRunning = 0;
+}
+
 int main(int argc, char **argv)
 {
+  signal(SIGINT, intHandler);
   fprintf(stderr, "init..\n");
   FILE* event_file = argc > 1 ? fopen(argv[1], "wb") : stdout;
 
@@ -101,7 +111,7 @@ int main(int argc, char **argv)
 
   jtag_go_to_state(STATE_SHIFT_DR);
 
-  while(true) {
+  while(keepRunning) {
     uint8_t data_read[4096*2*2] = {};
     jtag_tap_shift(data_read, data_read, 8*sizeof(data_read), false);
     for(int i = 0;i < sizeof(data_read) * 8;i++) {
@@ -109,6 +119,9 @@ int main(int argc, char **argv)
       shift_bit(event_file, b);
     }
   }
+
+  fclose(event_file);
+  fprintf(stderr, "Exiting...\n");
 
   return 0;
 }
