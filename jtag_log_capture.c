@@ -32,6 +32,9 @@ bool capturing = false;
 void shift_bit(FILE* event_file, bool b) {
   if(counter == 0) {
     if(b) counter = 96;
+    else {
+    fflush(event_file);
+    }
   }
 
   if(counter != 0)

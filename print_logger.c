@@ -32,11 +32,11 @@ FILE* file = 0;
 
 int main(int argc, char **argv)
 {
-  const char* raw_fn = argc > 1 ? argv[1] : "event_log.raw";
+  const char* raw_fn = argc > 1 ? argv[1] : 0;
 
   GlobalLogger_ctx ctx = {};
 
-  FILE* raw_file = fopen(raw_fn, "rb");
+  FILE* raw_file = raw_fn ? fopen(raw_fn, "rb") : stdin;
   struct GlobalLogger_transaction tx = { 0 };
 
   int txs = 0;
