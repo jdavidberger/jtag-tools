@@ -1,9 +1,9 @@
 #include "GlobalLogger.h"
 #include <stddef.h>
 
-#define NAME_FIELD(field) #field ": %llx "
+#define NAME_FIELD(field) #field ": %.*llx "
 
-#define VALUE_FIELD(field) , ((long long unsigned)pkt.field)
+#define VALUE_FIELD(field) , (int)(2 * sizeof(pkt.field)), ((long long unsigned)pkt.field)
 
 void GlobalLogger_handle_transaction(GlobalLogger_ctx* ctx, uint8_t id, const struct GlobalLogger_transaction* tx) {}
 

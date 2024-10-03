@@ -222,8 +222,8 @@ void mpsse_init(int ifnum, const char *devstr, int clkdiv)
         mpsse_send_byte((clkdiv-1) >> 8);
 
 	mpsse_send_byte(MC_SETB_LOW);
-	mpsse_send_byte(0x08); /* Value */
-	mpsse_send_byte(0x0B); /* Direction */
+	mpsse_send_byte(0x08); /* Value 0b1000 */
+	mpsse_send_byte(0x1B); /* Direction 0b1011 */
 }
 
 void mpsse_close(void)
