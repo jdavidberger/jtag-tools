@@ -21,8 +21,6 @@
 
 #include "GlobalLogger.h"
 
-#include "sqlite3.h"
-
 uint32_t d32[3] = { 0 };
 
 uint32_t log_caps = 0;
@@ -36,8 +34,10 @@ int main(int argc, char **argv)
 
   GlobalLogger_ctx ctx = {};
 
+
   FILE* raw_file = raw_fn ? fopen(raw_fn, "rb") : stdin;
   struct GlobalLogger_transaction tx = { 0 };
+
 
   int txs = 0;
 
