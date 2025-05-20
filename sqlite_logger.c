@@ -20,7 +20,7 @@
 #include "lattice_cmds.h"
 #include "stdbool.h"
 
-#include "GlobalLogger.h"
+#include "event_logger_defs.h"
 
 #include "sqlite3.h"
 
